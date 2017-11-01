@@ -29,6 +29,7 @@ computation time it will impose to the cluster.
 To run the task on the server:
 ### hadoop jar dist/TwitterSupportAnalysis.jar TwitterSupportAnalysis /data/olympictweets2016rio out ###
 to merge results
-### hadoop fs -getmerge out ???????.txt ###
+### hadoop fs -getmerge out athlete_names_mentioned.txt ###
+### hadoop fs -getmerge out sports_mentioned.txt ###
 
 
