@@ -3,6 +3,7 @@
 	import java.io.InputStreamReader;
 	import java.net.URI;
 	import java.util.Hashtable;
+	import java.util.Iterator;
 	import java.util.Set;
 
 	import org.apache.hadoop.fs.FSDataInputStream;
@@ -13,12 +14,16 @@
 	import org.apache.hadoop.mapreduce.Mapper;
 
 
+
 	public class SupportMapper extends Mapper<Object, Text, TextPair, IntWritable> {
 
 		private Hashtable<String, String> athletesData;
 		private final IntWritable one = new IntWritable(1);
 		private TweetsParser parser = new TweetsParser();
     private TextPair pair = new TextPair();
+    private Text ath_name = new Text();
+    private Text sport = new Text();
+    private String tweetBody = new String();
 
     public void map(Object key, Text tweet, Context context) throws IOException, InterruptedException {
 
@@ -26,17 +31,22 @@
 
   		if (parser.isValidTweet()) {
 
-  			Set<String> athlete_names = athletesData.keySet();
-  			for(String athlete_name: athlete_names){
-            if (parser.getTweetBody().toLowerCase().contains(athlete_name.toLowerCase())) {
+  			tweetBody = parser.getTweetBody().toLowerCase();
+				Set<String> athlete_names = athletesData.keySet();
+				Iterator itr = athlete_names.iterator();
+
+		    while (itr.hasNext()){
+		    		String athlete_key = (String) itr.next();
+            if (tweetBody.contains(athlete_key.toLowerCase())) {
             	//this would mean the athlete name is present in the text of the tweet.
-            	Text ath_name = new Text(athlete_name);
-            	Text sport = new Text(athletesData.get(athlete_name));
+            	ath_name.set(athlete_key);
+            	sport.set(athletesData.get(athlete_key));
             	pair.set(ath_name, sport);
             	//we set the pair to be the athlete name and sport, with a count of 1 to aggregate in our reducers.
             	context.write(pair, one);
             }
-        }
+		    }
+
   		}
     }
 
