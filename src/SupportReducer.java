@@ -5,18 +5,18 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
 
-public class SupportReducer extends Reducer<TextPair, IntWritable, IntWritable, IntWritable> {
+public class SupportReducer extends Reducer<TextPair, IntWritable, Text, IntWritable> {
 
     private IntWritable result = new IntWritable();
 
-    public void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+    public void reduce(TextPair key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
 
         int sum = 0;
         for (IntWritable value : values) {
             sum += value.get();
         }
        result.set(sum);
-       context.write(key, result);
+       context.write(key.getFirst(), result);
 
     }
 
