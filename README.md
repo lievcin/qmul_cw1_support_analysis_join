@@ -27,9 +27,6 @@ computation time it will impose to the cluster.
 
 ### ant clean dist ###
 To run the task on the server:
-### hadoop jar dist/TwitterSupportAnalysis.jar TwitterSupportAnalysis /data/olympictweets2016rio out ###
-to merge results
-### hadoop fs -getmerge out athlete_names_mentioned.txt ###
-### hadoop fs -getmerge out sports_mentioned.txt ###
+### hadoop jar dist/AthletesSportJoin.jar AthletesSportJoin /data/olympictweets2016rio input ###
 
 
